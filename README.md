@@ -28,12 +28,12 @@ Users should be able to:
 ### Screenshot
               This is a desktop View.
                  
-<img src="/screenshot-desktop.png">
+<img src="public/screenshot-desktop.png">
 
               This is a mobile view.
                  
 <p align="center">
-   <img src="/screenshot-mobile.png" height="500px">
+   <img src="public/screenshot-mobile.png" height="500px">
 </p>
 
 
