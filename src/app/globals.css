@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-xs: 25rem;
+  --breakpoint-xmd: 54.75rem;
+  --breakpoint-xxl: 93.75rem;
+
+  --color-cyan: #2acfcf;
+  --color-darkviolet: #3b3054;
+  --color-redline: #f46262,
+  --color-darkblueviolet: #232127,
+  --color-darkblue: #35323e,
+}
+
+
+
