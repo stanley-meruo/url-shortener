@@ -1,21 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import Button from "./Button";
 import toast from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa6";
 import Link from "next/link";
 
+interface ShortenedResult {
+  originalUrl: string;
+  shortUrl: string;
+}
+
 export default function Input() {
-  const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [shortenedResults, setShortenedResults] = useState([]);
-  const [copied, setCopied] = useState({});
+  const [url, setUrl] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [shortenedResults, setShortenedResults] = useState<ShortenedResult[]>(
+    []
+  );
+  const [copied, setCopied] = useState<Record<string, boolean>>({});
 
-  const API_KEY = process.env.NEXT_PUBLIC_TINYURL_API_KEY;
+  const API_KEY = process.env.NEXT_PUBLIC_TINYURL_API_KEY as string;
 
-  async function handleClick() {
+  async function handleClick(): Promise<void> {
     if (loading) return;
     const trimmedUrl = url.trim();
 
@@ -47,19 +54,14 @@ export default function Input() {
       const data = await res.json();
 
       if (data?.data?.tiny_url) {
-        setShortenedResults((prev) => {
-          const updated = [
-            {
-              originalUrl: trimmedUrl,
-              shortUrl: data.data.tiny_url,
-            },
-            ...prev,
-          ];
-          return updated.slice(0, 3); // Keep latest 3 only
-        });
+        const newResult: ShortenedResult = {
+          originalUrl: trimmedUrl,
+          shortUrl: data.data.tiny_url,
+        };
 
+        setShortenedResults((prev) => [newResult, ...prev].slice(0, 3));
         toast.success("URL has been shortened.");
-        setUrl(""); // Clear input
+        setUrl("");
       } else {
         const errorMessage =
           data?.errors?.[0]?.message || "Invalid response from API";
@@ -75,7 +77,7 @@ export default function Input() {
     }
   }
 
-  function handleCopy(link) {
+  function handleCopy(link: string): void {
     if (link) {
       navigator.clipboard.writeText(link);
       toast.success("Shortened URL copied to clipboard!");
@@ -91,6 +93,10 @@ export default function Input() {
     }
   }
 
+  function handleChange(e: ChangeEvent<HTMLInputElement>): void {
+    setUrl(e.target.value);
+  }
+
   return (
     <main className="bg-gray-100">
       <main className="text-lg p-5 xs:px-6 sm:px-8 lg:px-14 lg:py-12 xl:px-20 xxl:px-36">
@@ -99,7 +105,7 @@ export default function Input() {
             <input
               type="text"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={handleChange}
               placeholder="Shorten a link here..."
               className={`w-full rounded-lg p-3 focus:outline-none bg-white md:h-13 ${
                 error ? "border-3 border-red-400" : ""
