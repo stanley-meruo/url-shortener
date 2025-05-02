@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "url shortener",
-  description: "Generate Url with short link",
+  description: "Generate and Shorten Any Valid URL",
   icons: {
     icon: "/favicon.png",
   },
