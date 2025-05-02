@@ -1,13 +1,19 @@
 "use client";
-import Image from "next/image"
+import Image from "next/image";
 
-export default function Card({ title, description, icon }) {
+interface CardProps {
+  title: string;
+  description: string;
+  icon: string; // URL or path to the image
+}
+
+export default function Card({ title, description, icon }: CardProps) {
   return (
-    <div className="bg-white rounded-lg px-5 text-center shadow relative xmd:h-70 xmd:text-start lg:h-68 xl:px-8">
+    <div className="bg-white rounded-lg px-5 text-center shadow cursor-pointer hover:shadow-lg transition-shadow duration-300 relative xmd:h-70 xmd:text-start lg:h-68 xl:px-8">
       <span className="size-20 grid rounded-full bg-darkviolet absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 xmd:left-5 xmd:translate-x-0">
         <Image
           src={icon}
-          alt={icon}
+          alt={`${title} icon`}
           width={24}
           height={24}
           className="size-9 m-auto"
