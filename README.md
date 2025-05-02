@@ -1,5 +1,5 @@
-# URL Shotener
-
+# URL Shortener
+URL Shortener API to shorten your url and link.
 
 ## Table of contents
 
