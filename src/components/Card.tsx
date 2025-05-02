@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image"
 
-export default function Card({ title, description, icon, ...props }) {
+export default function Card({ title, description, icon }) {
   return (
     <div className="bg-white rounded-lg px-5 text-center shadow relative xmd:h-70 xmd:text-start lg:h-68 xl:px-8">
       <span className="size-20 grid rounded-full bg-darkviolet absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 xmd:left-5 xmd:translate-x-0">

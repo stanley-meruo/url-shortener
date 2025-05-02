@@ -10,7 +10,6 @@ export default function Input() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [shortenedUrl, setShortenedUrl] = useState("");
   const [shortenedResults, setShortenedResults] = useState("");
   const [copied, setCopied] = useState({});
 
