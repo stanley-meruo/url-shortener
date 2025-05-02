@@ -10,15 +10,23 @@ export default function Input() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [shortenedResults, setShortenedResults] = useState("");
+  const [shortenedResults, setShortenedResults] = useState([]);
   const [copied, setCopied] = useState({});
 
   const API_KEY = process.env.NEXT_PUBLIC_TINYURL_API_KEY;
 
   async function handleClick() {
     if (loading) return;
-    if (!url.trim()) {
+    const trimmedUrl = url.trim();
+
+    if (!trimmedUrl) {
       setError("Please enter a URL!");
+      return;
+    }
+
+    // Prevent duplicate entries
+    if (shortenedResults.some((result) => result.originalUrl === trimmedUrl)) {
+      toast.error("This URL has already been shortened.");
       return;
     }
 
@@ -33,7 +41,7 @@ export default function Input() {
           Authorization: `Bearer ${API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url: url.trim() }),
+        body: JSON.stringify({ url: trimmedUrl }),
       });
 
       const data = await res.json();
@@ -42,40 +50,43 @@ export default function Input() {
         setShortenedResults((prev) => {
           const updated = [
             {
-              originalUrl: url.trim(),
+              originalUrl: trimmedUrl,
               shortUrl: data.data.tiny_url,
             },
-            ...prev, // add the new link at the top
+            ...prev,
           ];
-          return updated.slice(0, 3); // keep only the latest 3
+          return updated.slice(0, 3); // Keep latest 3 only
         });
-        toast.success("URL has been Shortened.");
-        setUrl(""); // Clear input after successful shorten
+
+        toast.success("URL has been shortened.");
+        setUrl(""); // Clear input
       } else {
-        throw new Error("Invalid response from API");
+        const errorMessage =
+          data?.errors?.[0]?.message || "Invalid response from API";
+        setError(errorMessage);
+        toast.error(errorMessage);
       }
     } catch (err) {
       console.error(err);
-      toast.error("Failed to shorten URL.");
       setError("Something went wrong. Try again!");
+      toast.error("Failed to shorten URL.");
     } finally {
       setLoading(false);
     }
   }
 
-
   function handleCopy(link) {
     if (link) {
       navigator.clipboard.writeText(link);
       toast.success("Shortened URL copied to clipboard!");
-      
+
       setCopied((prev) => ({
         ...prev,
         [link]: true,
       }));
 
       setTimeout(() => {
-        setCopied(false);
+        setCopied({});
       }, 2500);
     }
   }
@@ -117,7 +128,7 @@ export default function Input() {
           </Button>
         </section>
 
-        <section className=" my-8">
+        <section className="my-8">
           {shortenedResults.length > 0 && (
             <div className="grid gap-6">
               {shortenedResults.map((result, index) => (
