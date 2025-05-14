@@ -40,7 +40,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: (https://url-shortener-ebon-five.vercel.app/)
+- [Live Url](https://url-shortener-ebon-five.vercel.app/)
 
 ## My process
 
